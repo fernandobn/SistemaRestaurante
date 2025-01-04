@@ -1,0 +1,47 @@
+{% extends 'plantilla.html' %}
+
+{% block contenido %}
+<br><br><br><br><br>
+
+<div class="container my-5">
+    <div class="p-5 text-center rounded" style="background: linear-gradient(135deg, rgba(52, 58, 64, 0.9), rgba(33, 37, 41, 0.9));">
+        <h1 class="text-white mb-4 mt-2 fw-bold">Listado de Recetas</h1>
+        <table class="table table-striped table-bordered text-white table-hover text-center" style="width: 100%;">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Título</th>
+                    <th scope="col">Comentarios</th>
+                    <th scope="col">Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for receta in recetas %}
+                <tr>
+                    <td class="align-middle">
+                        <strong>{{ receta.titulo }}</strong>
+                    </td>
+                    <td class="align-middle">
+                        {% for comentario in receta.comentarios.all %}
+                            <p><strong>{{ comentario.estudiante.nombre }} {{ comentario.estudiante.apellido }}:</strong> {{ comentario.texto }}</p>
+                        {% empty %}
+                            <p class="text-muted">No hay comentarios para esta receta.</p>
+                        {% endfor %}
+                    </td>
+                    <td class="align-middle">
+                        {% for comentario in receta.comentarios.all %}
+                            <p><small class="text-muted">{{ comentario.fecha|date:"d M Y H:i" }}</small></p>
+                        {% empty %}
+                            <p class="text-muted">-</p>
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Botón para regresar a la lista de recetas -->
+        <a href="{% url 'lista_recetas' %}" class="btn btn-primary rounded-pill mt-3 shadow-sm">Ver todas las recetas</a>
+    </div>
+</div>
+
+{% endblock %}

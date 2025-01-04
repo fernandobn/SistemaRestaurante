@@ -1,0 +1,186 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Comienza tu desarrollo con la página de aterrizaje de FoodHut.">
+    <meta name="author" content="Devcrud">
+    <title>Restaurante</title>
+
+    <script src="{% static 'js/jquery-3.7.1.js' %}"></script>
+    <script src="{% static 'js/jquery.validate.js' %}"></script>
+
+
+
+
+    <link href="{% static 'plantilla/resturante/public_html/assets/imgs/restaurante-_1_.ico' %}" rel="icon">
+
+    <!-- Íconos de fuente -->
+    <link rel="stylesheet" href="{% static 'plantilla/resturante/public_html/assets/vendors/themify-icons/css/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'plantilla/resturante/public_html/assets/vendors/animate/animate.css' %}">
+
+    <!-- Estilos principales de Bootstrap y FoodHut -->
+    <link rel="stylesheet" href="{% static 'plantilla/resturante/public_html/assets/css/foodhut.css' %}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" integrity="sha512-DIW4FkYTOxjCqRt7oS9BFO+nVOwDL4bzukDyDtMO7crjUZhwpyrWBFroq+IqRe6VnJkTpRAS6nhDvf0w+wHmxg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
+    
+    <!-- Barra de navegación -->
+    <nav class="custom-navbar navbar navbar-expand-lg navbar-dark fixed-top" data-spy="affix" data-offset-top="10">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Alternar navegación">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/FormRecetas/">Recetas</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="/lista_recetas/">Ver Recetas</a>
+                </li>
+            </ul>
+            <a class="navbar-brand m-auto" href="/">
+                <img src="{% static 'plantilla/resturante/public_html/assets/imgs/logo.svg' %}" class="brand-img w-25" alt="">
+                <br>
+                <span class="brand-txt">Food Hut</span>
+            </a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/listado_Usuarios/">Ver Usuarios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/galeria/">Galeria</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+     
+
+    <!-- Contenido dinámico -->
+
+{% block contenido %}
+<br>
+{% endblock %}
+
+
+<!-- Pie de página -->
+<div class="container-fluid bg-dark text-light has-height-md middle-items border-top text-center wow fadeIn">
+    <div class="row">
+        <div class="col-sm-4">
+            <h3>ENVÍANOS UN CORREO</h3>
+            <p class="text-muted">comidarapida@gmail.com</p>
+        </div>
+        <div class="col-sm-4">
+            <h3>LLÁMANOS</h3>
+            <p class="text-muted">09999999999</p>
+        </div>
+        <div class="col-sm-4">
+            <h3>ENCUÉNTRANOS</h3>
+            <p class="text-muted">Juan León Mera ( En los semáforos)</p>
+        </div>
+    </div>
+</div>
+<div class="bg-dark text-light text-center border-top wow fadeIn">
+    <p class="mb-0 py-3 text-muted small">&copy; Copyright <script>document.write(new Date().getFullYear())</script> Hecho con <i class="ti-heart text-danger"></i> Por estudiantes UTC</p>
+</div>
+<!-- Fin del pie de página -->
+
+<!-- Core -->
+<script src="{% static 'plantilla/resturante/public_html/assets/vendors/jquery/jquery-3.4.1.js' %}"></script>
+<script src="{% static 'plantilla/resturante/public_html/assets/vendors/bootstrap/bootstrap.bundle.js' %}"></script>
+
+<!-- Bootstrap affix -->
+<script src="{% static 'plantilla/resturante/public_html/assets/vendors/bootstrap/bootstrap.affix.js' %}"></script>
+
+<!-- wow.js -->
+<script src="{% static 'plantilla/resturante/public_html/assets/vendors/wow/wow.js' %}"></script>
+
+<!-- FoodHut js -->
+<script src="{% static 'plantilla/resturante/public_html/assets/js/foodhut.js' %}"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/iziToast@1.4.0/dist/js/iziToast.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iziToast@1.4.0/dist/css/iziToast.min.css">
+
+<script>
+    function showDeleteConfirmation(id, type) {
+        const url = type === 'comentario' 
+            ? `/eliminarComentario/${id}/` 
+            : `/eliminarReceta/${id}/`;
+
+        iziToast.question({
+            timeout: 20000,
+            close: false,
+            overlay: true,
+            displayMode: 'once',
+            id: 'question',
+            zindex: 999,
+            title: 'Confirmación',
+            message: `¿Estás seguro de que deseas eliminar este ${type}?`,
+            position: 'center',
+            buttons: [
+                ['<button><b>SÍ</b></button>', function (instance, toast) {
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}', // Si CSRF está habilitado
+                        },
+                    })
+                    .then(() => {
+                        setTimeout(() => location.reload(), 500); // Recarga la página tras eliminar
+                    });
+
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                }, true],
+                ['<button>NO</button>', function (instance, toast) {
+                    instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                }]
+            ]
+        });
+    }
+</script>
+
+
+
+{% if messages %}
+{% for mensajeConfirmacion in messages %}
+    <script>
+        // Función para mostrar el mensaje de éxito
+        function showSuccessMessage(message) {
+            iziToast.success({
+                title: 'Confirmación',
+                message: message,
+                position: 'topRight'
+            });
+        }
+
+        // Función para mostrar el mensaje de error
+        function showErrorMessage(message) {
+            iziToast.error({
+                title: 'Error',
+                message: message,
+                position: 'topRight'
+            });
+        }
+
+        // Verifica el tipo de mensaje y llama a la función correspondiente
+        if ("{{ mensajeConfirmacion.tags }}" == "success") {
+            showSuccessMessage('{{ mensajeConfirmacion }}');
+        } else if ("{{ mensajeConfirmacion.tags }}" == "error") {
+            showErrorMessage('{{ mensajeConfirmacion }}');
+        }
+    </script>
+{% endfor %}
+{% endif %}
+
+</body>
+</html>

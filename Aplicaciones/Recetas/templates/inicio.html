@@ -1,0 +1,15 @@
+{% extends 'plantilla.html' %} <!-- Extiende la plantilla base -->
+
+{% load static %} <!-- Carga las etiquetas para trabajar con archivos estáticos -->
+
+{% block contenido %} <!-- Sobrescribe el bloque llamado "contenido" -->
+
+<header id="home" class="header">
+    <div class="overlay text-white text-center">
+        <h1 class="display-2 font-weight-bold my-3">Comida Estudiantil</h1>
+        <h2 class="display-4 mb-5">Lo Mejor &amp; De Lo Mejor</h2>
+        <a class="btn btn-lg btn-primary" href="/galeria/">View Our gallary</a>
+    </div>
+</header>  
+
+{% endblock %}

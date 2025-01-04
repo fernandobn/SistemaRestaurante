@@ -1,0 +1,138 @@
+{% extends 'plantilla.html' %}
+
+{% block contenido %}
+<br><br><br><br><br><br>
+<div class="container my-5">
+    <h1 class="text-center mb-4 text-white fw-bold">Lista de Recetas</h1>
+    <form method="GET" action="{% url 'lista_recetas' %}">
+        <div class="d-flex mb-3 align-items-center">
+            <div class="me-3">
+                <label class="text-white" for="dificultad">Ver recetas por: </label>
+                <select name="dificultad" id="dificultad" class="form-select bg-dark border border-light text-white" style="height: calc(2.25rem + 2px);">
+                    <option value="" selected disabled>Seleccione una receta por:</option>
+                    <option value="Fácil" {% if request.GET.dificultad == "Fácil" %}selected{% endif %}>Fácil</option>
+                    <option value="Intermedio" {% if request.GET.dificultad == "Intermedio" %}selected{% endif %}>Intermedio</option>
+                    <option value="Difícil" {% if request.GET.dificultad == "Difícil" %}selected{% endif %}>Difícil</option>
+                </select>
+            </div>
+            &nbsp;&nbsp;
+            <button type="submit" class="btn btn-success py-2 px-4 align-self-center rounded-pill" style="height: calc(2.25rem + 2px);">Buscar</button>
+        </div>
+    </form>
+
+    {% for receta in recetas %}
+    <div class="card shadow-sm mb-4" style="background: linear-gradient(rgba(52, 58, 64, 0.9), rgba(33, 37, 41, 0.9)); border-radius: 10px;">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h4 class="h6 text-secondary text-white">Titulo:</h4>
+            <h2 class="h5 mb-0">{{ receta.titulo }}</h2>
+            <small>Dificultad: <strong>{{ receta.dificultad }}</strong> | Tiempo: <strong>{{ receta.tiempo_preparacion }} minutos</strong></small>
+        </div>
+        <div class="card-body">
+            <h4 class="h6 text-secondary text-white fw-bold">Ingredientes:</h4>
+            <ul>
+                {% for ingrediente in receta.ingredientes.all %}
+                <li>{{ ingrediente.cantidad }} de {{ ingrediente.nombre }}</li>
+                {% endfor %}
+            </ul>
+            <h4 class="h6 text-secondary text-white fw-bold">Paso a paso:</h4>
+            <p>{{ receta.descripcion }}</p>
+        </div>
+        <div class="card-footer bg-secondary text-white">
+            <h5>Comentarios:</h5>
+            <ul>
+                {% for comentario in receta.comentarios.all %}
+                <li class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ comentario.estudiante.nombre }} {{ comentario.estudiante.apellido }}</strong>: {{ comentario.texto }}
+                        <p><small>{{ comentario.fecha }}</small></p>
+                    </div>
+                    <button onclick="showDeleteConfirmation({{ comentario.id_comentario }}, 'comentario')" class="btn btn-danger btn-sm rounded-pill mb-2">Eliminar</button>
+                </li>
+                {% empty %}
+                <li>No hay comentarios todavía.</li>
+                {% endfor %}
+            </ul>
+            <form method="POST" action="{% url 'agregar_comentario' %}" id="form_comentario_{{ receta.id_receta }}">
+                {% csrf_token %}
+                <input type="hidden" name="id_receta" value="{{ receta.id_receta }}">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="text" name="nombre" class="form-control" placeholder="Nombre" required>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" name="apellido" class="form-control" placeholder="Apellido" required>
+                    </div>
+                </div>
+                <textarea name="texto" class="form-control mt-2" placeholder="Escribe un comentario..." required></textarea>
+                <button type="submit" class="btn btn-info mt-2">Comentar</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+<script>
+    // Validación del formulario de comentarios con jQuery
+    {% for receta in recetas %}
+    $("#form_comentario_{{ receta.id_receta }}").validate({
+        rules: {
+            "nombre": {
+                required: true,
+                minlength: 2,
+                letras: true
+            },
+            "apellido": {
+                required: true,
+                minlength: 2,
+                letras: true
+            },
+            "texto": {
+                required: true,
+                minlength: 4
+            }
+        },
+        messages: {
+            "nombre": {
+                required: "Por favor, ingresa tu nombre.",
+                minlength: "El nombre debe tener al menos 2 caracteres."
+            },
+            "apellido": {
+                required: "Por favor, ingresa tu apellido.",
+                minlength: "El apellido debe tener al menos 2 caracteres."
+            },
+            "texto": {
+                required: "Por favor, ingresa un comentario.",
+                minlength: "El comentario debe tener al menos 4 caracteres."
+            }
+        },
+        submitHandler: function(form) {
+            form.submit();
+        }
+    });
+    {% endfor %}
+</script>
+
+<style>
+    label.error {
+        color: white;
+        font-weight: bold;
+        background-color: red;
+        border-radius: 10px;
+        padding: 5px;
+        margin-top: 5px;
+    }
+    input.error,
+    textarea.error {
+        border: 1px solid red;
+    }
+</style>
+<script>
+    jQuery.validator.addMethod("letras", function(value, element) {            
+          return this.optional(element) || /^[A-Za-zÁÉÍÓÚÑáéíóúñ ]*$/.test(value);
+      }, "Este campo solo acepta letras");
+  
+  </script>
+
+{% endblock %}

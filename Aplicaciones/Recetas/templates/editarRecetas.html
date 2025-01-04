@@ -1,0 +1,148 @@
+{% extends 'plantilla.html' %}
+
+{% block contenido %}
+<br><br><br><br><br><br><br><br>
+<div class="d-flex justify-content-center align-items-center min-vh-100" style="padding-bottom: 50px;">
+    <div class="reservation position-relative overlay-top overlay-bottom w-100" style="max-width: 800px;">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="text-center p-5" style="background: linear-gradient(rgba(52, 58, 64, 0.9), rgba(33, 37, 41, 0.9)); border-radius: 10px;">
+                    <h1 class="text-white mb-4 mt-2">Actualiza la Receta</h1>
+                    <form method="POST" action="/procesar_edicion_receta/" id="formulario_editar_receta">
+                        {% csrf_token %}
+                        <input type="hidden" name="id_receta" value="{{ receta.id_receta }}">
+
+                        <!-- Título de la receta -->
+                        <div class="form-group">
+                            <label for="titulo" class="text-white">Título de la receta</label>
+                            <input type="text" class="form-control" id="titulo" name="titulo" value="{{ receta.titulo }}" required>
+                        </div>
+
+                        <!-- Tiempo de preparación -->
+                        <div class="form-group">
+                            <label for="tiempo_preparacion" class="text-white">Tiempo de preparación (minutos)</label>
+                            <input type="number" class="form-control" id="tiempo_preparacion" name="tiempo_preparacion" value="{{ receta.tiempo_preparacion }}" required>
+                        </div>
+
+                        <!-- Dificultad -->
+                        <div class="form-group">
+                            <label for="dificultad" class="text-white">Dificultad</label>
+                            <select class="form-control" id="dificultad" name="dificultad" required>
+                                <option value="Fácil" {% if receta.dificultad == "Fácil" %}selected{% endif %}>Fácil</option>
+                                <option value="Intermedio" {% if receta.dificultad == "Intermedio" %}selected{% endif %}>Intermedio</option>
+                                <option value="Difícil" {% if receta.dificultad == "Difícil" %}selected{% endif %}>Difícil</option>
+                            </select>
+                        </div>
+
+                        <!-- Ingredientes -->
+                        <div id="ingredientes-list" class="form-group">
+                            <label class="text-white">Ingredientes</label>
+                            {% for ingrediente in ingredientes %}
+                            <div class="form-group d-md-flex justify-content-between">
+                                <input type="text" class="form-control mb-2 me-md-2" name="ingredientes[]" value="{{ ingrediente.nombre }}" placeholder="Ingrediente" required>
+                                <input type="text" class="form-control mb-2" name="cantidad[]" value="{{ ingrediente.cantidad }}" placeholder="Cantidad" required>
+                            </div>
+                            {% endfor %}
+                            <button type="button" class="btn btn-dark btn-sm mt-2 rounded-pill" onclick="this.insertAdjacentHTML('beforebegin', this.previousElementSibling.outerHTML)">Agregar ingrediente</button>
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="form-group">
+                            <label for="descripcion" class="text-white">Descripción</label>
+                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required>{{ receta.descripcion }}</textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-info rounded-pill">Actualizar Receta</button>
+                        <a href="/recetas/" class="btn btn-danger rounded-pill">Regresar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Validación de formulario para edición
+    $("#formulario_editar_receta").validate({
+        rules: {
+            "titulo": {
+                required: true,
+                minlength: 3,
+                letras: true
+            },
+            "tiempo_preparacion": {
+                required: true,
+                number: true,
+                min: 1
+            },
+            "dificultad": {
+                required: true
+            },
+            "ingredientes[]": {
+                required: true,
+                minlength: 3
+            },
+            "cantidad[]": {
+                required: true,
+                number: true,
+                min: 1
+            },
+            "descripcion": {
+                required: true,
+                minlength: 10
+            }
+        },
+        messages: {
+            "titulo": {
+                required: "Por favor, ingresa el título de la receta.",
+                minlength: "El título debe tener al menos 3 caracteres."
+            },
+            "tiempo_preparacion": {
+                required: "Por favor, ingresa el tiempo de preparación.",
+                number: "Debe ser un valor numérico.",
+                min: "El tiempo de preparación debe ser al menos 1 minuto."
+            },
+            "dificultad": {
+                required: "Por favor, selecciona la dificultad."
+            },
+            "ingredientes[]": {
+                required: "Por favor, ingresa al menos un ingrediente.",
+                minlength: "El nombre del ingrediente debe tener al menos 3 caracteres."
+            },
+            "cantidad[]": {
+                required: "Por favor, ingresa la cantidad del ingrediente.",
+                number: "Debe ser un valor numérico.",
+                min: "La cantidad debe ser al menos 1."
+            },
+            "descripcion": {
+                required: "Por favor, ingrese los pasos de la receta.",
+                minlength: "La descripción debe tener al menos 10 caracteres."
+            }
+        },
+    });
+</script>
+
+<style>
+    label.error{
+        color:white;
+        font-weight: bold;
+        background-color: red;
+        border-radius: 10px;
+        padding: 5px;
+        margin-top: 5px;
+    }
+    input.error{
+        border: 1px solid red;
+    }
+    textarea.error{
+        border: 1px solid red;
+    }
+</style>
+<script>
+    jQuery.validator.addMethod("letras", function(value, element) {            
+          return this.optional(element) || /^[A-Za-zÁÉÍÓÚÑáéíóúñ ]*$/.test(value);
+      }, "Este campo solo acepta letras");
+  
+  </script>
+
+{% endblock %}
